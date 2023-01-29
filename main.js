@@ -27,10 +27,31 @@ function counterPerformance() {
 	var startTime = performance.now();
 	let finalDoc = Automerge.merge(doc1, doc2);
 	var endTime = performance.now();
+	
+	console.log(`Final counter value: ${finalDoc.counter.value}`);
 
-	console.log(`Final counter value: ${finalDoc.counter}`);
+	return endTime - startTime;
+}
 
-	return endTime - startTime
+function registerPerformance() {
+	// semantics is random:
+	// https://automerge.org/docs/cookbook/conflicts/
+	let doc1 = Automerge.change(Automerge.init(), doc => {
+		doc.x = 1
+	})
+	let doc2 = Automerge.change(Automerge.init(), doc => {
+		doc.x = 2
+	})
+
+	var startTime = performance.now();
+	doc1 = Automerge.merge(doc1, doc2)
+	var endTime = performance.now();
+
+	console.log(`Final register value: ${doc1.x}`);
+
+	return endTime - startTime;
 }
 
 console.log(`Time to merge: ${counterPerformance()} milliseconds`);
+console.log(`Time to merge: ${registerPerformance()} milliseconds`);
+
